@@ -1,0 +1,14 @@
+{
+  "name": "Rosen Air Airports Visited",
+  "short_name": "Rosen Air",
+  "description": "Map of every airport in Larry Rosen's log, 1985-2024",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#10141a",
+  "theme_color": "#10141a",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

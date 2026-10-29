@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10141a">
 <title>Rosen Air Airports Visited</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rosen Air">
 <link rel="preload" href="fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -77,7 +83,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#171
 .panel .id{font:600 26px var(--mono);color:var(--pc,var(--amber));grid-row:span 3;align-self:center;min-width:3.6em}
 .panel .nm{font-weight:600;font-size:15px;min-width:0}
 .panel .meta{color:var(--text-muted);font-size:13px;min-width:0}
-.panel .meta b{color:var(--text-primary)!important;font-weight:600}
+.panel .meta b{color:var(--text-primary)!important;font-weight:600;white-space:nowrap}
 .panel .note{font-size:13px;font-style:italic;color:var(--teal);min-width:0}
 .panel.empty{display:block;color:var(--text-muted);font-size:13px}
 .foot{font-size:12px;color:var(--text-muted);line-height:1.55;margin:0;padding:0 4px}
@@ -86,50 +92,22 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#171
 @media (max-width:520px){.inset{width:38%;height:calc(38vw / 1.5)}.hint{display:none}.panel .id{font-size:22px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
-.ggp-footer{
-  --ggp-amber:#f5a623; --ggp-muted:#8b93a1; --ggp-bezel:#2a323f; --ggp-bezel-hi:#3a4454;
-  box-sizing:border-box; width:100%; max-width:640px; margin:28px auto 0; padding:16px 0 8px;
-  border-top:1px solid var(--ggp-bezel); text-align:center;
-  font-family:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  font-size:11px; line-height:1.5; color:var(--ggp-muted);
-}
-.ggp-footer *, .ggp-footer *::before, .ggp-footer *::after{ box-sizing:border-box; }
-.ggp-footer .ggp-back{ margin:0 0 12px; }
-.ggp-footer .ggp-back a{
-  display:inline-block; padding:6px 14px; border:1px solid var(--ggp-bezel-hi); border-radius:5px;
-  background:var(--ggp-bezel); color:var(--ggp-amber); font-size:12px; font-weight:500; text-decoration:none;
-}
-.ggp-footer .ggp-back a:hover{ background:var(--ggp-bezel-hi); color:var(--ggp-amber); text-decoration:none; }
-.ggp-footer .ggp-extra{ margin:0 0 6px; text-wrap:balance; }
-.ggp-footer .ggp-credit{ margin:0; }
-.ggp-footer .ggp-extra a, .ggp-footer .ggp-credit a{
-  color:var(--ggp-muted); text-decoration:none; border-bottom:1px solid var(--ggp-bezel-hi); padding-bottom:1px;
-}
-.ggp-footer .ggp-extra a:hover, .ggp-footer .ggp-credit a:hover{ color:var(--ggp-amber); border-bottom-color:var(--ggp-amber); }
-.ggp-footer .ggp-count{ margin-top:6px; }
-.ggp-footer .ggp-count:empty{ display:none; }
-.ggp-footer .ggp-actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:12px; }
-.ggp-footer .ggp-pill{
-  display:inline-flex; align-items:center; gap:7px; margin:0; padding:8px 16px;
-  border:1px solid var(--ggp-bezel-hi); border-radius:20px; background:transparent; color:var(--ggp-muted);
-  font:inherit; font-size:12.5px; line-height:1.2; cursor:pointer; transition:color .15s ease, border-color .15s ease;
-}
-.ggp-footer .ggp-pill:hover{ color:var(--ggp-amber); border-color:var(--ggp-amber); background:transparent; }
-.ggp-footer .ggp-pill svg{ width:15px; height:15px; flex-shrink:0; }
-.ggp-footer .ggp-pill span{ text-wrap:balance; }
-@media (max-width:400px){ .ggp-footer .ggp-pill{ font-size:12px; padding:8px 12px; gap:6px; } }
-.ggp-footer a:focus-visible, .ggp-footer .ggp-pill:focus-visible{ outline:2px solid var(--ggp-amber); outline-offset:2px; }
-@media print{
-  .ggp-footer .ggp-back, .ggp-footer .ggp-extra, .ggp-footer .ggp-count, .ggp-footer .ggp-actions{ display:none !important; }
-  .ggp-footer{ border-top:0; margin-top:8px; padding-top:0; }
-}
+.install-row{display:flex;justify-content:center;margin-top:14px}
+.pill{display:none;align-items:center;gap:7px;padding:8px 16px;border:1px solid var(--bezel-hi);border-radius:20px;background:transparent;color:var(--text-muted);font:inherit;font-size:12.5px;cursor:pointer}
+.pill:hover{color:var(--amber);border-color:var(--amber)}
+.pill svg{width:15px;height:15px;flex-shrink:0}
+.install-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:20px;z-index:100}
+.install-overlay.open{display:flex}
+.install-card{background:var(--bg-panel);border:1px solid var(--bezel-hi);border-radius:10px;max-width:340px;padding:20px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.install-card p{margin:0 0 16px;font-size:13.5px;line-height:1.6}
+.install-close{display:block;margin-left:auto}
 </style>
 </head>
 <body>
 <div class="rig">
   <div class="title-row">
     <h1>Rosen Air Airports Visited</h1>
-    <span class="ver mono">v1.1</span>
+    <span class="ver mono">v1.2</span>
   </div>
   <p class="purpose-line"><span class="purpose-label">Purpose:</span> Every airport in Larry Rosen's log, 1985–2024, pinned by decade of first visit. Filter by decade, scrub or play the timeline, tap a pin for details.</p>
   <div class="stat" id="stat"></div>
@@ -152,14 +130,9 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#171
   <div class="card panel empty" id="panel">Tap a pin for airport details.</div>
   <p class="foot">Data: Rosen Air airport log, 1985–2024. Names, cities and coordinates from the OurAirports database (Oct 2026). Ringed pins are closed airports.</p>
   <p class="foot"><a class="dl" href="RosenAir_Airports_Visited.xlsx" download>Download the airport list (Excel)</a> — all 219 airports with dates, IDs, coordinates and notes, plus the original log.</p>
+  <div class="install-row"><button class="pill" id="installBtn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"></path><polyline points="7 8 12 3 17 8"></polyline><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"></path></svg><span>Add this map to Home Screen</span></button></div>
 </div>
-<footer class="ggp-footer">
-  <div class="ggp-back"><a href="https://geezer-geek-pilot-control-panel.netlify.app/">← Back to GeezerGeek Pilot Apps</a></div>
-  <div class="ggp-credit">Wayne McClelland, <a href="https://youtube.com/@GeezerGeekPilot" target="_blank" rel="noopener">GeezerGeek Pilot</a>, <a href="https://docs.google.com/document/d/1chfDa3JBCjsGykGjwrAFwOqMAS7d3_dIY9ieROLCIyU/preview" target="_blank" rel="noopener">Reference Materials</a></div>
-  <div class="ggp-actions">
-    <button class="ggp-pill ggp-share" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line></svg><span>Share GeezerGeek Pilot Apps with pilot friends</span></button>
-  </div>
-</footer>
+<div class="install-overlay" id="installOverlay"><div class="install-card"><p id="installText"></p><button class="btn install-close" id="installClose" type="button">Got it</button></div></div>
 
 <script>
 window.__t0=Date.now();window.__step='page loaded';
@@ -261,36 +234,25 @@ window.__done=true;
 
 <script>
 (() => {
-  if (window.__ggpFooter) return;
-  window.__ggpFooter = true;
-  // Every app's footer share button shares the Control Panel, not the app itself.
-  const SHARE_URL   = 'https://geezer-geek-pilot-control-panel.netlify.app/';
-  const SHARE_TITLE = 'GeezerGeek Pilot Apps';
-  const SHARE_TEXT  = 'Planning, weather, ATC-practice and safety tools for GA pilots, from GeezerGeek Pilot.';
-  const flash = (btn) => {
-    if (btn.dataset.ggpBusy) return;
-    btn.dataset.ggpBusy = '1';
-    const label = btn.querySelector('span') || btn;
-    const original = label.textContent;
-    label.textContent = label === btn ? 'Link copied!' : 'Link copied to clipboard!';
-    setTimeout(() => { label.textContent = original; delete btn.dataset.ggpBusy; }, 2200);
-  };
-  document.addEventListener('click', async (ev) => {
-    const btn = ev.target instanceof Element ? ev.target.closest('.ggp-share') : null;
-    if (!btn) return;
-    ev.preventDefault();
-    if (navigator.share) {
-      try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL }); return; }
-      catch (err) { if (err && err.name === 'AbortError') return; }
-    }
-    try {
-      await navigator.clipboard.writeText(SHARE_URL);
-      flash(btn);
-    } catch (err) {
-      window.location.href = 'mailto:?subject=' + encodeURIComponent(SHARE_TITLE)
-        + '&body=' + encodeURIComponent(SHARE_TEXT + ' ' + SHARE_URL);
-    }
+  const btn=document.getElementById('installBtn'), ov=document.getElementById('installOverlay'), txt=document.getElementById('installText');
+  let deferred=null;
+  const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  const ua=navigator.userAgent;
+  const isIOS=/iPad|iPhone|iPod/.test(ua)||(ua.includes('Macintosh')&&navigator.maxTouchPoints>1);
+  const isMac=/Macintosh/.test(ua)&&!isIOS;
+  const isSafari=/^((?!chrome|android|crios|fxios|edg).)*safari/i.test(ua);
+  const show=m=>{txt.textContent=m;ov.classList.add('open')};
+  if(!standalone) btn.style.display='inline-flex';
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;btn.style.display='inline-flex'});
+  btn.addEventListener('click',async()=>{
+    if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;return}
+    if(isIOS) show('On your iPhone or iPad: tap the Share icon in Safari\u2019s toolbar, then choose \u201cAdd to Home Screen.\u201d');
+    else if(isMac&&isSafari) show('On your Mac: in Safari\u2019s menu bar, choose File \u2192 Add to Dock. (Safari 17 or later required.)');
+    else show('Look for an install icon in your browser\u2019s address bar, or check your browser\u2019s menu for \u201cInstall App\u201d or \u201cAdd to Home Screen.\u201d');
   });
+  document.getElementById('installClose').addEventListener('click',()=>ov.classList.remove('open'));
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open')});
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();
 </script>
 </body>
