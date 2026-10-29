@@ -6,7 +6,7 @@
 import type { Config } from "@netlify/functions";
 import { BASE_IDS, store, listAdded, lookup, pinOk, validDate, json, fd } from "../lib/shared.mjs";
 
-export default async (req: Request) => {
+async function handle(req: Request) {
   if (req.method === "GET") return json({ added: await listAdded() });
 
   let body: any;
@@ -39,9 +39,15 @@ export default async (req: Request) => {
   if (action === "lookup") return json({ airport: ap });
 
   const rec = { ...ap, date: body.date, note: "", added: new Date().toISOString().slice(0, 10) };
-  const { modified } = await s.setJSON(ap.id, rec, { onlyIfNew: true });
-  if (!modified) return json({ error: `${ap.id} was already added.` }, 409);
+  const r = await s.setJSON(ap.id, rec, { onlyIfNew: true });
+  if (r && r.modified === false) return json({ error: `${ap.id} was already added.` }, 409);
   return json({ airport: rec });
+}
+
+// Any unexpected failure comes back as a readable JSON error (shown in the popup) instead of a bare 502.
+export default async (req: Request) => {
+  try { return await handle(req); }
+  catch (e: any) { console.error(e); return json({ error: "Server problem: " + (e?.message || e) }, 500); }
 };
 
 export const config: Config = {
