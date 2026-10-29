@@ -47,8 +47,9 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,4vw,34px);let
 .yr{font:700 18px var(--display);font-variant-numeric:tabular-nums;width:3.2em}
 .btn{font:600 14px var(--display);letter-spacing:.03em;padding:6px 12px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:3px;cursor:pointer}
 .btn.ghost{background:var(--chip);color:var(--ink);border-color:var(--rule)}
-.mapbox{position:relative;border:1px solid var(--line);background:var(--water);overflow:hidden;aspect-ratio:16/10;max-width:100%;min-height:320px;touch-action:none}
-svg{display:block;width:100%;height:100%}
+.mapbox{position:relative;border:1px solid var(--line);background:var(--water);overflow:hidden;width:100%;height:clamp(320px,62vw,720px);touch-action:none}
+#map{position:absolute;inset:0;display:block;width:100%;height:100%}
+#hi{position:absolute;inset:0;display:block;width:100%;height:100%}
 .state{fill:var(--land);stroke:var(--line);stroke-width:.6;vector-effect:non-scaling-stroke}
 .ctry{fill:var(--land2);stroke:var(--line);stroke-width:.6;vector-effect:non-scaling-stroke}
 .grat{fill:none;stroke:var(--line2);stroke-width:.5;stroke-dasharray:2 3;vector-effect:non-scaling-stroke}
@@ -56,7 +57,7 @@ svg{display:block;width:100%;height:100%}
 .pin.closed{fill:var(--halo)!important}
 .pin.sel{stroke-width:2.5}
 .lbl{font-family:var(--display);font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-linejoin:round;pointer-events:none}
-.inset{position:absolute;left:10px;bottom:10px;width:min(30%,220px);aspect-ratio:1.5;border:1px solid var(--line);background:var(--water)}
+.inset{position:absolute;left:10px;bottom:10px;width:min(30%,220px);height:calc(min(30vw,220px) / 1.5);max-height:150px;border:1px solid var(--line);background:var(--water)}
 .inset span{position:absolute;top:3px;left:6px;font:600 11px var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:4px}
 .zoom button{width:34px;height:34px;font:700 18px var(--display);border:1px solid var(--rule);background:var(--chip);color:var(--ink);border-radius:3px;cursor:pointer}
@@ -68,7 +69,7 @@ svg{display:block;width:100%;height:100%}
 .panel .note{font-size:13.5px;font-style:italic;min-width:0}
 .panel.empty{display:block;color:var(--muted);font-size:14px}
 .foot{font-size:12.5px;color:var(--muted);line-height:1.5}
-@media (max-width:520px){.inset{width:38%}.hint{display:none}.panel .id{font-size:24px}}
+@media (max-width:520px){.inset{width:38%;height:calc(38vw / 1.5)}.hint{display:none}.panel .id{font-size:24px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -176,7 +177,13 @@ let timer=null;
 play.onclick=()=>{if(timer){clearInterval(timer);timer=null;play.textContent='Play';return}
   if(through>=2024){through=1985;yr.value=1985;yrv.textContent=1985;render()}
   play.textContent='Pause';timer=setInterval(()=>{if(through>=2024){clearInterval(timer);timer=null;play.textContent='Play';return}through++;yr.value=through;yrv.textContent=through;render()},280)};
-new ResizeObserver(()=>layout()).observe(box);
+let lastW=0,lastH=0,raf=0;
+function relayout(){raf=0;const W=box.clientWidth,H=box.clientHeight;if(!W||!H||(Math.abs(W-lastW)<2&&Math.abs(H-lastH)<2))return;lastW=W;lastH=H;
+  try{layout()}catch(err){showErr(err)}}
+function showErr(err){const p=document.getElementById('panel');p.className='panel empty';p.textContent='Map error: '+(err&&err.message||err)+' (please send Wayne a screenshot)';console.error(err)}
+window.addEventListener('error',e=>showErr(e.error||e.message));
+if(window.ResizeObserver){new ResizeObserver(()=>{if(!raf)raf=requestAnimationFrame(relayout)}).observe(box)}else{window.addEventListener('resize',()=>{if(!raf)raf=requestAnimationFrame(relayout)})}
+relayout();
 </script>
 
 </body>
