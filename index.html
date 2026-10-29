@@ -3,88 +3,137 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10141a">
 <title>Rosen Air Airports Visited</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preload" href="fonts/archivo-narrow-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:'Archivo Narrow';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/archivo-narrow-latin-500-normal.woff2) format('woff2')}
-@font-face{font-family:'Archivo Narrow';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/archivo-narrow-latin-600-normal.woff2) format('woff2')}
-@font-face{font-family:'Archivo Narrow';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/archivo-narrow-latin-700-normal.woff2) format('woff2')}
-@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/atkinson-hyperlegible-latin-400-normal.woff2) format('woff2')}
-@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/atkinson-hyperlegible-latin-700-normal.woff2) format('woff2')}
-/* Layout: a sectional-chart-like sheet; header strip, control row, full-width map, detail panel beneath. */
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ibm-plex-sans-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/ibm-plex-sans-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/ibm-plex-sans-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ibm-plex-sans-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/ibm-plex-mono-latin-600-normal.woff2) format('woff2')}
+/* GeezerGeek Pilot Apps style: dark cockpit panel, amber accents, teal purpose line, IBM Plex. */
 :root{
-  --bg:#eef0ea; --paper:#f7f7f2; --land:#e6e2d3; --land2:#ddd8c6; --water:#cfe0e8; --line:#a9a48f; --line2:#c6c1ad;
-  --ink:#1f2a2e; --muted:#5d686a; --rule:#c9ccc0; --chip:#ffffff; --halo:#f7f7f2;
-  --d80:#7B3FA0; --d90:#2F6FD0; --d00:#1E9E6A; --d10:#E08A1E; --d20:#D23C3C;
-  --display:"Archivo Narrow","Arial Narrow",Arial,sans-serif;
-  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --bg-deep:#10141a; --bg-panel:#1b222c; --bezel:#2a323f; --bezel-hi:#3a4454;
+  --amber:#f5a623; --amber-dim:#7a5a1e; --text-primary:#e7e4dc; --text-muted:#8b93a1; --teal:#3fa7a0;
+  /* map */
+  --water:#0d1117; --land:#1f2731; --land2:#1a2029; --line:#46505f; --line2:#232b36; --halo:#10141a;
+  /* pins by decade (unchanged hues) */
+  --d80:#B07AD6; --d90:#6FA3F0; --d00:#45C893; --d10:#F0A84A; --d20:#F07070;
+  /* names the map script uses */
+  --ink:var(--text-primary); --muted:var(--text-muted);
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#141a1d; --paper:#1a2225; --land:#26302f; --land2:#2c3735; --water:#0f1b22; --line:#55625f; --line2:#3b4644;
-  --ink:#e7ece8; --muted:#9aa6a4; --rule:#33403f; --chip:#1f2a2c; --halo:#1a2225;
-  --d80:#B07AD6; --d90:#6FA3F0; --d00:#45C893; --d10:#F0A84A; --d20:#F07070; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#141a1d; --paper:#1a2225; --land:#26302f; --land2:#2c3735; --water:#0f1b22; --line:#55625f; --line2:#3b4644;
-  --ink:#e7ece8; --muted:#9aa6a4; --rule:#33403f; --chip:#1f2a2c; --halo:#1a2225;
-  --d80:#B07AD6; --d90:#6FA3F0; --d00:#45C893; --d10:#F0A84A; --d20:#F07070; color-scheme:dark}
-html,body{background:var(--bg);color:var(--ink)}
-body{margin:0;font-size:14px}
-body{font-family:var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 28px}
-.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 20px;border-bottom:2px solid var(--ink);padding-bottom:8px}
-h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,4vw,34px);letter-spacing:.02em;text-transform:uppercase;margin:0;text-wrap:balance}
-.stat{font-family:var(--display);font-size:15px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;font-variant-numeric:tabular-nums}
-.stat b{color:var(--ink)}
-.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg-deep);color-scheme:dark;overscroll-behavior:none}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#171d26 0%,var(--bg-deep) 60%);font-family:var(--sans);font-size:14px;color:var(--text-primary);
+  padding:16px max(12px,env(safe-area-inset-right,0px)) 40px max(12px,env(safe-area-inset-left,0px))}
+.mono{font-family:var(--mono)}
+.rig{width:100%;max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.title-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:0 4px}
+.title-row h1{font-size:19px;font-weight:600;margin:0;letter-spacing:.01em}
+.title-row .ver{font-size:11px;color:var(--text-muted)}
+.purpose-line{font-size:12.5px;color:var(--teal);margin:-6px 4px 0;line-height:1.5}
+.purpose-label{color:var(--text-primary)}
+.stat{font-family:var(--mono);font-size:12px;color:var(--text-muted);padding:0 4px;font-variant-numeric:tabular-nums}
+.stat b{color:var(--amber);font-weight:600}
+.card{background:var(--bg-panel);border:1px solid var(--bezel-hi);border-radius:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 6px 16px rgba(0,0,0,.25)}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:10px 12px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font:600 14px var(--display);letter-spacing:.03em;display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid var(--rule);border-radius:3px;background:var(--chip);color:var(--ink);cursor:pointer;font-variant-numeric:tabular-nums}
-.chip i{width:11px;height:11px;border-radius:50%;background:var(--c);display:inline-block;border:1.5px solid var(--ink)}
-.chip[aria-pressed="false"]{opacity:.45}
-.chip[aria-pressed="false"] i{background:transparent}
-.chip:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--d90);outline-offset:2px}
-.legend-closed{font:600 14px var(--display);color:var(--muted);display:inline-flex;align-items:center;gap:6px;letter-spacing:.03em}
-.legend-closed i{width:11px;height:11px;border-radius:50%;border:3px solid var(--muted);box-sizing:border-box;display:inline-block}
+.chip{font:500 12px var(--mono);display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid var(--bezel-hi);border-radius:20px;background:var(--bezel);color:var(--text-primary);cursor:pointer;font-variant-numeric:tabular-nums}
+.chip i{width:10px;height:10px;border-radius:50%;background:var(--c);display:inline-block;border:1.5px solid var(--bg-deep)}
+.chip[aria-pressed="false"]{opacity:.45;background:transparent}
+.chip[aria-pressed="false"] i{background:transparent;border-color:var(--c)}
+.chip:hover{border-color:var(--amber)}
+.chip:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.legend-closed{font:500 12px var(--mono);color:var(--text-muted);display:inline-flex;align-items:center;gap:6px}
+.legend-closed i{width:11px;height:11px;border-radius:50%;border:3px solid var(--text-muted);display:inline-block}
 .time{display:flex;align-items:center;gap:10px;flex:1 1 300px;min-width:0}
-.time label{font:600 14px var(--display);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.time input{flex:1;min-width:80px;accent-color:var(--ink)}
-.yr{font:700 18px var(--display);font-variant-numeric:tabular-nums;width:3.2em}
-.btn{font:600 14px var(--display);letter-spacing:.03em;padding:6px 12px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:3px;cursor:pointer}
-.btn.ghost{background:var(--chip);color:var(--ink);border-color:var(--rule)}
-.mapbox{position:relative;border:1px solid var(--line);background:var(--water);overflow:hidden;width:100%;height:clamp(320px,62vw,720px);touch-action:none}
-#map{position:absolute;inset:0;display:block;width:100%;height:100%}
-#hi{position:absolute;inset:0;display:block;width:100%;height:100%}
+.time label{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap}
+.time input{flex:1;min-width:80px;accent-color:var(--amber)}
+.yr{font:600 16px var(--mono);color:var(--amber);font-variant-numeric:tabular-nums;width:3.2em}
+.btn{font:500 12.5px var(--mono);padding:8px 16px;border:none;background:var(--amber);color:var(--bg-deep);border-radius:5px;cursor:pointer}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(1px)}
+.mapbox{position:relative;background:var(--water);overflow:hidden;width:100%;height:clamp(320px,62vw,640px);touch-action:none;border-radius:10px}
+#map,#hi{position:absolute;inset:0;display:block;width:100%;height:100%}
 .state{fill:var(--land);stroke:var(--line);stroke-width:.6}
 .ctry{fill:var(--land2);stroke:var(--line);stroke-width:.6}
 .grat{fill:none;stroke:var(--line2);stroke-width:.5}
-.pin{stroke:var(--ink);cursor:pointer}
+.pin{stroke:var(--bg-deep);cursor:pointer}
 .pin.closed{fill:var(--halo)!important}
-.pin.sel{}
-.lbl{font-family:var(--display);font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-linejoin:round;pointer-events:none}
-.inset{position:absolute;left:10px;bottom:10px;width:min(30%,220px);height:calc(min(30vw,220px) / 1.5);max-height:150px;border:1px solid var(--line);background:var(--water)}
-.inset span{position:absolute;top:3px;left:6px;font:600 11px var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pin.sel{stroke:var(--text-primary)}
+.lbl{font-family:var(--mono);font-weight:500;fill:var(--text-primary);paint-order:stroke;stroke:var(--halo);stroke-linejoin:round;pointer-events:none}
+.inset{position:absolute;left:10px;bottom:10px;width:min(30%,220px);height:calc(min(30vw,220px) / 1.5);max-height:150px;border:1px solid var(--bezel-hi);border-radius:6px;background:var(--water);overflow:hidden}
+.inset span{position:absolute;top:4px;left:7px;font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
 .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:4px}
-.zoom button{width:34px;height:34px;font:700 18px var(--display);border:1px solid var(--rule);background:var(--chip);color:var(--ink);border-radius:3px;cursor:pointer}
-.hint{position:absolute;right:10px;bottom:8px;font:500 12px var(--display);color:var(--muted);letter-spacing:.03em;background:color-mix(in srgb,var(--paper) 80%,transparent);padding:2px 6px;border-radius:2px}
-.panel{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;background:var(--paper);border:1px solid var(--rule);border-left:6px solid var(--pc,var(--rule));padding:12px 16px;min-height:76px}
-.panel .id{font:700 30px var(--display);letter-spacing:.03em;grid-row:span 3;align-self:center;min-width:3.4em}
-.panel .nm{font-weight:700;font-size:16px;min-width:0}
-.panel .meta{color:var(--muted);font-size:14px;min-width:0}
-.panel .note{font-size:13.5px;font-style:italic;min-width:0}
-.panel.empty{display:block;color:var(--muted);font-size:14px}
-.foot{font-size:12.5px;color:var(--muted);line-height:1.5}
-@media (max-width:520px){.inset{width:38%;height:calc(38vw / 1.5)}.hint{display:none}.panel .id{font-size:24px}}
+.zoom button{width:34px;height:34px;font:500 17px var(--mono);border:1px solid var(--bezel-hi);background:var(--bezel);color:var(--amber);border-radius:5px;cursor:pointer}
+.zoom button:hover{background:var(--bezel-hi)}
+.hint{position:absolute;right:10px;bottom:8px;font:500 11px var(--mono);color:var(--text-muted);background:rgba(16,20,26,.8);padding:3px 7px;border-radius:4px}
+.panel{display:grid;grid-template-columns:auto 1fr;gap:3px 16px;border-left:4px solid var(--pc,var(--bezel-hi));padding:12px 16px;min-height:76px}
+.panel .id{font:600 26px var(--mono);color:var(--pc,var(--amber));grid-row:span 3;align-self:center;min-width:3.6em}
+.panel .nm{font-weight:600;font-size:15px;min-width:0}
+.panel .meta{color:var(--text-muted);font-size:13px;min-width:0}
+.panel .meta b{color:var(--text-primary)!important;font-weight:600}
+.panel .note{font-size:13px;font-style:italic;color:var(--teal);min-width:0}
+.panel.empty{display:block;color:var(--text-muted);font-size:13px}
+.foot{font-size:12px;color:var(--text-muted);line-height:1.55;margin:0;padding:0 4px}
+.dl{color:var(--amber);font-weight:600;text-decoration:none;border-bottom:1px solid var(--amber-dim)}
+.dl:hover{border-bottom-color:var(--amber)}
+@media (max-width:520px){.inset{width:38%;height:calc(38vw / 1.5)}.hint{display:none}.panel .id{font-size:22px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
 
+.ggp-footer{
+  --ggp-amber:#f5a623; --ggp-muted:#8b93a1; --ggp-bezel:#2a323f; --ggp-bezel-hi:#3a4454;
+  box-sizing:border-box; width:100%; max-width:640px; margin:28px auto 0; padding:16px 0 8px;
+  border-top:1px solid var(--ggp-bezel); text-align:center;
+  font-family:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size:11px; line-height:1.5; color:var(--ggp-muted);
+}
+.ggp-footer *, .ggp-footer *::before, .ggp-footer *::after{ box-sizing:border-box; }
+.ggp-footer .ggp-back{ margin:0 0 12px; }
+.ggp-footer .ggp-back a{
+  display:inline-block; padding:6px 14px; border:1px solid var(--ggp-bezel-hi); border-radius:5px;
+  background:var(--ggp-bezel); color:var(--ggp-amber); font-size:12px; font-weight:500; text-decoration:none;
+}
+.ggp-footer .ggp-back a:hover{ background:var(--ggp-bezel-hi); color:var(--ggp-amber); text-decoration:none; }
+.ggp-footer .ggp-extra{ margin:0 0 6px; text-wrap:balance; }
+.ggp-footer .ggp-credit{ margin:0; }
+.ggp-footer .ggp-extra a, .ggp-footer .ggp-credit a{
+  color:var(--ggp-muted); text-decoration:none; border-bottom:1px solid var(--ggp-bezel-hi); padding-bottom:1px;
+}
+.ggp-footer .ggp-extra a:hover, .ggp-footer .ggp-credit a:hover{ color:var(--ggp-amber); border-bottom-color:var(--ggp-amber); }
+.ggp-footer .ggp-count{ margin-top:6px; }
+.ggp-footer .ggp-count:empty{ display:none; }
+.ggp-footer .ggp-actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:12px; }
+.ggp-footer .ggp-pill{
+  display:inline-flex; align-items:center; gap:7px; margin:0; padding:8px 16px;
+  border:1px solid var(--ggp-bezel-hi); border-radius:20px; background:transparent; color:var(--ggp-muted);
+  font:inherit; font-size:12.5px; line-height:1.2; cursor:pointer; transition:color .15s ease, border-color .15s ease;
+}
+.ggp-footer .ggp-pill:hover{ color:var(--ggp-amber); border-color:var(--ggp-amber); background:transparent; }
+.ggp-footer .ggp-pill svg{ width:15px; height:15px; flex-shrink:0; }
+.ggp-footer .ggp-pill span{ text-wrap:balance; }
+@media (max-width:400px){ .ggp-footer .ggp-pill{ font-size:12px; padding:8px 12px; gap:6px; } }
+.ggp-footer a:focus-visible, .ggp-footer .ggp-pill:focus-visible{ outline:2px solid var(--ggp-amber); outline-offset:2px; }
+@media print{
+  .ggp-footer .ggp-back, .ggp-footer .ggp-extra, .ggp-footer .ggp-count, .ggp-footer .ggp-actions{ display:none !important; }
+  .ggp-footer{ border-top:0; margin-top:8px; padding-top:0; }
+}
+</style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Rosen Air Airports Visited</h1><!-- v2026-10-29b webkit-fix -->
-    <div class="stat" id="stat"></div>
-  </header>
-  <div class="controls">
+<div class="rig">
+  <div class="title-row">
+    <h1>Rosen Air Airports Visited</h1>
+    <span class="ver mono">v1.1</span>
+  </div>
+  <p class="purpose-line"><span class="purpose-label">Purpose:</span> Every airport in Larry Rosen's log, 1985–2024, pinned by decade of first visit. Filter by decade, scrub or play the timeline, tap a pin for details.</p>
+  <div class="stat" id="stat"></div>
+  <div class="card controls">
     <div class="chips" id="chips"></div>
     <span class="legend-closed"><i></i>Closed</span>
     <div class="time">
@@ -94,17 +143,23 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,4vw,34px);let
       <button class="btn" id="play" type="button">Play</button>
     </div>
   </div>
-  <div class="mapbox" id="mapbox">
+  <div class="card mapbox" id="mapbox">
     <svg id="map" role="img" aria-label="Map of airports visited"></svg>
     <div class="inset"><span>Hawaii</span><svg id="hi"></svg></div>
-    <div class="zoom"><button id="zin" type="button" aria-label="Zoom in">+</button><button id="zout" type="button" aria-label="Zoom out">−</button><button id="zreset" type="button" aria-label="Reset view" style="font-size:13px">⟲</button></div>
+    <div class="zoom"><button id="zin" type="button" aria-label="Zoom in">+</button><button id="zout" type="button" aria-label="Zoom out">−</button><button id="zreset" type="button" aria-label="Reset view" style="font-size:14px">⟲</button></div>
     <div class="hint">Scroll or pinch to zoom · IDs appear when zoomed in</div>
   </div>
-  <div class="panel empty" id="panel">Tap a pin for airport details.</div>
-  <p class="foot">Data: Rosen Air airport log, 1985–2024. Names, cities and coordinates from the OurAirports database (Oct 2026). Pins colored by decade of first visit; ringed pins are closed airports.</p>
-  <p class="foot"><a href="RosenAir_Airports_Visited.xlsx" download style="color:var(--ink);font-weight:700">Download the airport list (Excel spreadsheet)</a> — all 219 airports with dates, IDs, coordinates and notes, plus the original log.</p>
-  <p class="foot"><a href="https://geezer-geek-pilot-control-panel.netlify.app" style="color:inherit">← back to GeezerGeek Pilot Apps</a></p>
+  <div class="card panel empty" id="panel">Tap a pin for airport details.</div>
+  <p class="foot">Data: Rosen Air airport log, 1985–2024. Names, cities and coordinates from the OurAirports database (Oct 2026). Ringed pins are closed airports.</p>
+  <p class="foot"><a class="dl" href="RosenAir_Airports_Visited.xlsx" download>Download the airport list (Excel)</a> — all 219 airports with dates, IDs, coordinates and notes, plus the original log.</p>
 </div>
+<footer class="ggp-footer">
+  <div class="ggp-back"><a href="https://geezer-geek-pilot-control-panel.netlify.app/">← Back to GeezerGeek Pilot Apps</a></div>
+  <div class="ggp-credit">Wayne McClelland, <a href="https://youtube.com/@GeezerGeekPilot" target="_blank" rel="noopener">GeezerGeek Pilot</a>, <a href="https://docs.google.com/document/d/1chfDa3JBCjsGykGjwrAFwOqMAS7d3_dIY9ieROLCIyU/preview" target="_blank" rel="noopener">Reference Materials</a></div>
+  <div class="ggp-actions">
+    <button class="ggp-pill ggp-share" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line></svg><span>Share GeezerGeek Pilot Apps with pilot friends</span></button>
+  </div>
+</footer>
 
 <script>
 window.__t0=Date.now();window.__step='page loaded';
@@ -122,7 +177,7 @@ __st('data read; building controls');
 const DEC=[['1980s','--d80'],['1990s','--d90'],['2000s','--d00'],['2010s','--d10'],['2020s','--d20']];
 const KEY={C:'Closed',R:'Identifier changed since visit',F:'FAA ID only, no ICAO code','?':'Uncertain, worth a look'};
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const fd=s=>{const [y,m,d]=s.split('-');return `${y}-${MON[+m-1]}-${d}`};
+const fd=s=>{const [y,m,d]=s.split('-');return `${d}-${MON[+m-1]}-${y}`};
 const air=AIR.map(a=>({id:a[0],date:a[1],yr:+a[1].slice(0,4),name:a[2],city:a[3],st:a[4],ctry:a[5],flags:a[6],lat:a[7],lon:a[8],note:a[9],dec:a[1].slice(0,3)+'0s'}));
 const on=new Set(DEC.map(d=>d[0]));
 let through=2024, sel=null, k=1;
@@ -204,5 +259,39 @@ window.__done=true;
 {const p=document.getElementById('panel');if(p&&p.textContent.startsWith('Starting map')){p.textContent='Tap a pin for airport details.'}}
 </script>
 
+<script>
+(() => {
+  if (window.__ggpFooter) return;
+  window.__ggpFooter = true;
+  // Every app's footer share button shares the Control Panel, not the app itself.
+  const SHARE_URL   = 'https://geezer-geek-pilot-control-panel.netlify.app/';
+  const SHARE_TITLE = 'GeezerGeek Pilot Apps';
+  const SHARE_TEXT  = 'Planning, weather, ATC-practice and safety tools for GA pilots, from GeezerGeek Pilot.';
+  const flash = (btn) => {
+    if (btn.dataset.ggpBusy) return;
+    btn.dataset.ggpBusy = '1';
+    const label = btn.querySelector('span') || btn;
+    const original = label.textContent;
+    label.textContent = label === btn ? 'Link copied!' : 'Link copied to clipboard!';
+    setTimeout(() => { label.textContent = original; delete btn.dataset.ggpBusy; }, 2200);
+  };
+  document.addEventListener('click', async (ev) => {
+    const btn = ev.target instanceof Element ? ev.target.closest('.ggp-share') : null;
+    if (!btn) return;
+    ev.preventDefault();
+    if (navigator.share) {
+      try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL }); return; }
+      catch (err) { if (err && err.name === 'AbortError') return; }
+    }
+    try {
+      await navigator.clipboard.writeText(SHARE_URL);
+      flash(btn);
+    } catch (err) {
+      window.location.href = 'mailto:?subject=' + encodeURIComponent(SHARE_TITLE)
+        + '&body=' + encodeURIComponent(SHARE_TEXT + ' ' + SHARE_URL);
+    }
+  });
+})();
+</script>
 </body>
 </html>
