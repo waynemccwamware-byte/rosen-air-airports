@@ -93,6 +93,24 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#171
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 .install-row{display:flex;justify-content:center;margin-top:14px}
+.dl-row{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;padding-right:4px}
+.dl-row .foot{flex:1 1 300px}
+.add-card{max-width:360px;width:100%}
+.add-card h2{font-size:15px;font-weight:600;margin:0 0 14px}
+.add-card label{display:block;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin:0 0 5px}
+.add-card input{display:block;width:100%;font:500 15px var(--mono);color:var(--text-primary);background:var(--bg-deep);border:1px solid var(--bezel-hi);border-radius:5px;padding:9px 10px;margin:0 0 12px;color-scheme:dark}
+.add-card input:focus{border-color:var(--amber);outline:none}
+.add-card #fId{text-transform:uppercase}
+.add-match{border-left:4px solid var(--teal);background:var(--bg-deep);border-radius:5px;padding:9px 12px;margin:0 0 14px;font-size:13px;line-height:1.5}
+.add-match b{font-family:var(--mono);color:var(--amber)}
+.add-msg{font-size:13px;color:#F07070;margin:0 0 12px;min-height:0}
+.add-msg:empty{display:none}
+.add-btns{display:flex;justify-content:flex-end;gap:8px}
+.btn.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--bezel-hi)}
+.btn.ghost:hover{color:var(--amber);border-color:var(--amber);filter:none}
+.btn[disabled]{opacity:.5;cursor:default}
+.rm{font:500 12px var(--mono);color:var(--text-muted);background:none;border:none;padding:0;margin-left:8px;cursor:pointer;text-decoration:underline}
+.rm:hover{color:#F07070}
 .pill{display:none;align-items:center;gap:7px;padding:8px 16px;border:1px solid var(--bezel-hi);border-radius:20px;background:transparent;color:var(--text-muted);font:inherit;font-size:12.5px;cursor:pointer}
 .pill:hover{color:var(--amber);border-color:var(--amber)}
 .pill svg{width:15px;height:15px;flex-shrink:0}
@@ -107,9 +125,9 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#171
 <div class="rig">
   <div class="title-row">
     <h1>Rosen Air Airports Visited</h1>
-    <span class="ver mono">v1.2</span>
+    <span class="ver mono">v1.3</span>
   </div>
-  <p class="purpose-line"><span class="purpose-label">Purpose:</span> Every airport in Larry Rosen's log, 1985–2024, pinned by decade of first visit. Filter by decade, scrub or play the timeline, tap a pin for details.</p>
+  <p class="purpose-line"><span class="purpose-label">Purpose:</span> Every airport in Larry Rosen's log, 1985–<span class="yend">2024</span>, pinned by decade of first visit. Filter by decade, scrub or play the timeline, tap a pin for details.</p>
   <div class="stat" id="stat"></div>
   <div class="card controls">
     <div class="chips" id="chips"></div>
@@ -128,10 +146,19 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#171
     <div class="hint">Scroll or pinch to zoom · IDs appear when zoomed in</div>
   </div>
   <div class="card panel empty" id="panel">Tap a pin for airport details.</div>
-  <p class="foot">Data: Rosen Air airport log, 1985–2024. Names, cities and coordinates from the OurAirports database (Oct 2026). Ringed pins are closed airports.</p>
-  <p class="foot"><a class="dl" href="RosenAir_Airports_Visited.xlsx" download>Download the airport list (Excel)</a> — all 219 airports with dates, IDs, coordinates and notes, plus the original log.</p>
+  <p class="foot">Data: Rosen Air airport log, 1985–<span class="yend">2024</span>. Names, cities and coordinates from the OurAirports database (Oct 2026). Ringed pins are closed airports.</p>
+  <div class="dl-row"><p class="foot"><a class="dl" href="/api/download" download="RosenAir_Airports_Visited.xlsx">Download the airport list (Excel)</a> — all <span id="nAll">219</span> airports with dates, IDs, coordinates and notes, plus the original log.</p><button class="btn" id="addBtn" type="button">Add airport</button></div>
   <div class="install-row"><button class="pill" id="installBtn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"></path><polyline points="7 8 12 3 17 8"></polyline><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"></path></svg><span>Add this map to Home Screen</span></button></div>
 </div>
+<div class="install-overlay" id="addOverlay" role="dialog" aria-modal="true" aria-labelledby="addTitle"><form class="install-card add-card" id="addForm" autocomplete="off">
+<h2 id="addTitle">Add airport</h2>
+<label for="fId">Airport ID</label><input id="fId" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="7" placeholder="KSBA, SBA, L88, MMLT" required>
+<label for="fDate">Date first visited</label><input id="fDate" type="date" min="1980-01-01" required>
+<div id="pinWrap"><label for="fPin">PIN</label><input id="fPin" autocapitalize="characters" spellcheck="false" maxlength="8"></div>
+<div class="add-match" id="addMatch" hidden></div>
+<p class="add-msg" id="addMsg"></p>
+<div class="add-btns"><button class="btn ghost" id="addCancel" type="button">Cancel</button><button class="btn" id="addGo" type="submit">Look up</button></div>
+</form></div>
 <div class="install-overlay" id="installOverlay"><div class="install-card"><p id="installText"></p><button class="btn install-close" id="installClose" type="button">Got it</button></div></div>
 
 <script>
@@ -151,12 +178,13 @@ const DEC=[['1980s','--d80'],['1990s','--d90'],['2000s','--d00'],['2010s','--d10
 const KEY={C:'Closed',R:'Identifier changed since visit',F:'FAA ID only, no ICAO code','?':'Uncertain, worth a look'};
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const fd=s=>{const [y,m,d]=s.split('-');return `${d}-${MON[+m-1]}-${y}`};
-const air=AIR.map(a=>({id:a[0],date:a[1],yr:+a[1].slice(0,4),name:a[2],city:a[3],st:a[4],ctry:a[5],flags:a[6],lat:a[7],lon:a[8],note:a[9],dec:a[1].slice(0,3)+'0s'}));
+const toAir=a=>({id:a[0],date:a[1],yr:+a[1].slice(0,4),name:a[2],city:a[3],st:a[4],ctry:a[5],flags:a[6],lat:a[7],lon:a[8],note:a[9],dec:a[1].slice(0,3)+'0s'});
+const baseAir=AIR.map(toAir); let air=baseAir.slice(), YMAX=2024;
 const on=new Set(DEC.map(d=>d[0]));
-let through=2024, sel=null, k=1;
+let through=YMAX, sel=null, k=1;
 
 const chips=document.getElementById('chips');
-DEC.forEach(([d,v])=>{const n=air.filter(a=>a.dec===d).length;const b=document.createElement('button');b.className='chip';b.type='button';b.id='chip-'+d;b.style.setProperty('--c',`var(${v})`);b.setAttribute('aria-pressed','true');b.innerHTML=`<i></i>${d} <span style="color:var(--muted)">${n}</span>`;b.onclick=()=>{on.has(d)?on.delete(d):on.add(d);b.setAttribute('aria-pressed',on.has(d));render()};chips.appendChild(b)});
+DEC.forEach(([d,v])=>{const n=air.filter(a=>a.dec===d).length;const b=document.createElement('button');b.className='chip';b.type='button';b.id='chip-'+d;b.style.setProperty('--c',`var(${v})`);b.setAttribute('aria-pressed','true');b.innerHTML=`<i></i>${d} <span class="cnt" style="color:var(--muted)">${n}</span>`;b.onclick=()=>{on.has(d)?on.delete(d):on.add(d);b.setAttribute('aria-pressed',on.has(d));render()};chips.appendChild(b)});
 
 const svg=d3.select('#map'), box=document.getElementById('mapbox');
 const g=svg.append('g');
@@ -168,7 +196,7 @@ const path=d3.geoPath(proj);
 const gLand=g.append('g'), gPins=g.append('g'), gLbl=g.append('g');
 let zRaf=0;
 function landStroke(){gLand.selectAll('.state,.ctry').style('stroke-width',.6/k);gLand.selectAll('.grat').style('stroke-width',.5/k)}
-const mainAir=air.filter(a=>a.st!=='HI'), hiAir=air.filter(a=>a.st==='HI');
+let mainAir=air.filter(a=>a.st!=='HI'), hiAir=air.filter(a=>a.st==='HI');
 
 function layout(){
   const W=box.clientWidth,H=box.clientHeight;svg.attr('viewBox',`0 0 ${W} ${H}`);
@@ -208,7 +236,7 @@ function render(){
 }
 function pick(a){sel=a;const p=document.getElementById('panel');p.className='panel';p.style.setProperty('--pc',color(a));
   const keys=a.flags?[...a.flags].map(c=>KEY[c]).join(' · '):'';
-  p.innerHTML=`<div class="id">${a.id}</div><div class="nm">${a.name}</div><div class="meta">${a.city?a.city+', ':''}${a.st}, ${a.ctry} · first visited <b style="color:var(--ink)">${fd(a.date)}</b> · ${a.lat.toFixed(4)}, ${a.lon.toFixed(4)}</div><div class="note">${[keys,a.note].filter(Boolean).join(' — ')}</div>`;render()}
+  p.innerHTML=`<div class="id">${a.id}</div><div class="nm">${a.name}</div><div class="meta">${a.city?a.city+', ':''}${a.st}, ${a.ctry} · first visited <b style="color:var(--ink)">${fd(a.date)}</b> · ${a.lat.toFixed(4)}, ${a.lon.toFixed(4)}</div><div class="note">${[keys,a.note,a.added?'Added '+fd(a.added):''].filter(Boolean).join(' — ')}${a.added?`<button class="rm" type="button" data-rm="${a.id}">Remove</button>`:''}</div>`;render()}
 const zoom=d3.zoom().scaleExtent([1,40]).on('zoom',e=>{k=e.transform.k;g.attr('transform',e.transform);if(!zRaf)zRaf=requestAnimationFrame(()=>{zRaf=0;landStroke();render()})});
 svg.call(zoom).on('click',()=>{});
 document.getElementById('zin').onclick=()=>svg.transition().duration(250).call(zoom.scaleBy,2);
@@ -218,8 +246,8 @@ const yr=document.getElementById('yr'),yrv=document.getElementById('yrv'),play=d
 yr.oninput=()=>{through=+yr.value;yrv.textContent=through;render()};
 let timer=null;
 play.onclick=()=>{if(timer){clearInterval(timer);timer=null;play.textContent='Play';return}
-  if(through>=2024){through=1985;yr.value=1985;yrv.textContent=1985;render()}
-  play.textContent='Pause';timer=setInterval(()=>{if(through>=2024){clearInterval(timer);timer=null;play.textContent='Play';return}through++;yr.value=through;yrv.textContent=through;render()},280)};
+  if(through>=YMAX){through=1985;yr.value=1985;yrv.textContent=1985;render()}
+  play.textContent='Pause';timer=setInterval(()=>{if(through>=YMAX){clearInterval(timer);timer=null;play.textContent='Play';return}through++;yr.value=through;yrv.textContent=through;render()},280)};
 __st('drawing map');
 let lastW=0,lastH=0,raf=0;
 function relayout(){raf=0;const W=box.clientWidth,H=box.clientHeight;if(!W||!H||(Math.abs(W-lastW)<2&&Math.abs(H-lastH)<2))return;lastW=W;lastH=H;
@@ -232,6 +260,95 @@ window.__done=true;
 {const p=document.getElementById('panel');if(p&&p.textContent.startsWith('Starting map')){p.textContent='Tap a pin for airport details.'}}
 </script>
 
+<script>
+// Add airport: lookup → confirm → save (Netlify function + Blobs); added airports merge into the map.
+(() => {
+  const API='/api/airports', $=id=>document.getElementById(id);
+  const ov=$('addOverlay'), form=$('addForm'), fId=$('fId'), fDate=$('fDate'), fPin=$('fPin'), pinWrap=$('pinWrap'),
+        match=$('addMatch'), msg=$('addMsg'), go=$('addGo'), panel=$('panel');
+  const getPin=()=>{try{return localStorage.getItem('raPin')||''}catch(e){return ''}};
+  const setPin=v=>{try{v?localStorage.setItem('raPin',v):localStorage.removeItem('raPin')}catch(e){}};
+  const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+  let found=null, busy=false;
+
+  function apply(added){
+    const ids=new Set(baseAir.map(a=>a.id));
+    const extra=added.filter(a=>!ids.has(a.id)).map(a=>Object.assign(toAir([a.id,a.date,a.name,a.city,a.st,a.ctry,a.flags||'',a.lat,a.lon,a.note||'']),{added:a.added}));
+    air=baseAir.concat(extra).sort((a,b)=>a.date.localeCompare(b.date));
+    mainAir=air.filter(a=>a.st!=='HI'); hiAir=air.filter(a=>a.st==='HI');
+    const atEnd=through>=YMAX;
+    YMAX=Math.max(2024,...air.map(a=>a.yr)); yr.max=YMAX;
+    if(atEnd){through=YMAX;yr.value=YMAX;yrv.textContent=YMAX}
+    document.querySelectorAll('.yend').forEach(e=>e.textContent=YMAX);
+    $('nAll').textContent=air.length;
+    DEC.forEach(([d])=>{const c=document.querySelector('#chip-'+d+' .cnt');if(c)c.textContent=air.filter(a=>a.dec===d).length});
+    if(sel&&!air.includes(sel)){sel=null;panel.className='panel empty';panel.style.removeProperty('--pc');panel.textContent='Tap a pin for airport details.'}
+    lastW=lastH=-99; relayout();
+  }
+  const refresh=()=>fetch(API,{cache:'no-store'}).then(r=>r.json()).then(d=>{if(d&&Array.isArray(d.added))apply(d.added)});
+  refresh().catch(()=>{});
+
+  async function call(body){
+    const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
+    let d={}; try{d=await r.json()}catch(e){}
+    if(r.status===401){setPin('');pinWrap.hidden=false;fPin.value='';}
+    if(!r.ok) throw new Error(d.error||('Server error '+r.status));
+    return d;
+  }
+  const say=t=>{msg.textContent=t||''};
+  function showMatch(a){
+    match.hidden=false; match.textContent='';
+    const b=document.createElement('b'); b.textContent=a.id; match.append(b,' ',a.name);
+    const flags=[a.flags.includes('C')?'Closed':'',a.flags.includes('F')?'FAA ID only, no ICAO code':''].filter(Boolean).join(' · ');
+    const line=document.createElement('div'); line.style.color='var(--text-muted)';
+    line.textContent=[a.city,a.st,a.ctry].filter(Boolean).join(', ')+' · '+a.lat.toFixed(4)+', '+a.lon.toFixed(4)+(flags?' · '+flags:'');
+    match.append(line);
+  }
+  function reset(){found=null;match.hidden=true;go.textContent='Look up';say('')}
+  function open(){
+    form.reset(); reset(); fDate.max=today(); fDate.value=today();
+    pinWrap.hidden=!!getPin(); ov.classList.add('open'); setTimeout(()=>fId.focus(),50);
+  }
+  const close=()=>ov.classList.remove('open');
+
+  $('addBtn').onclick=open; $('addCancel').onclick=close;
+  ov.addEventListener('click',e=>{if(e.target===ov)close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('open'))close()});
+  fId.addEventListener('input',()=>{if(found)reset()});
+
+  form.addEventListener('submit',async e=>{
+    e.preventDefault(); if(busy)return;
+    const pin=pinWrap.hidden?getPin():fPin.value.trim();
+    if(!pin){pinWrap.hidden=false;say('Enter the PIN.');fPin.focus();return}
+    busy=true; go.disabled=true; say('');
+    try{
+      if(!found){
+        go.textContent='Looking up…';
+        const d=await call({action:'lookup',id:fId.value,pin});
+        setPin(pin); found=d.airport; fId.value=found.id; showMatch(found); go.textContent='Add '+found.id;
+      }else{
+        go.textContent='Saving…';
+        const d=await call({action:'add',id:found.id,date:fDate.value,pin});
+        setPin(pin); await refresh(); close();
+        const a=air.find(x=>x.id===d.airport.id);
+        if(a){if(!on.has(a.dec)){on.add(a.dec);const c=$('chip-'+a.dec);if(c)c.setAttribute('aria-pressed','true')}
+          if(a.yr>through){through=YMAX;yr.value=YMAX;yrv.textContent=YMAX}
+          pick(a)}
+      }
+    }catch(err){say(err.message); if(!found)go.textContent='Look up'; else go.textContent='Add '+found.id}
+    busy=false; go.disabled=false;
+  });
+
+  panel.addEventListener('click',async e=>{
+    const b=e.target.closest('[data-rm]'); if(!b)return;
+    const id=b.dataset.rm;
+    if(!confirm('Remove '+id+' from the map and the airport list?'))return;
+    let pin=getPin(); if(!pin){pin=(prompt('PIN')||'').trim(); if(!pin)return}
+    try{await call({action:'remove',id,pin}); setPin(pin); await refresh()}
+    catch(err){alert(err.message)}
+  });
+})();
+</script>
 <script>
 (() => {
   const btn=document.getElementById('installBtn'), ov=document.getElementById('installOverlay'), txt=document.getElementById('installText');
